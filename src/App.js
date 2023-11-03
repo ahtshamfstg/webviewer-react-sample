@@ -1,6 +1,14 @@
+/* global Core */
 import React, { useRef, useEffect } from 'react';
 import WebViewer from '@pdftron/webviewer';
 import './App.css';
+
+Core.setWorkerPath("webviewer/lib/core");
+Core.enableFullPDF();
+
+const workerTransportPromise = Core.PDFNet.initialize().then(() =>
+  Core.initPDFWorkerTransports("ems", {})
+);
 
 const App = () => {
   const viewer = useRef(null);
@@ -9,8 +17,9 @@ const App = () => {
   useEffect(() => {
     WebViewer(
       {
+        workerTransportPromise,
         path: '/webviewer/lib',
-        initialDoc: '/files/PDFTRON_about.pdf',
+        initialDoc: '/files/construction_drawing-final.pdf',
         licenseKey: 'your_license_key'  // sign up to get a free trial key at https://dev.apryse.com
       },
       viewer.current,
@@ -18,6 +27,11 @@ const App = () => {
       const { documentViewer, annotationManager, Annotations } = instance.Core;
 
       documentViewer.addEventListener('documentLoaded', () => {
+        console.log("adding layers updated event listener");
+        documentViewer.getDocument().addEventListener("layersUpdated", () => {
+          console.log("layers updated");
+        });
+
         const rectangleAnnot = new Annotations.RectangleAnnotation({
           PageNumber: 1,
           // values are in page coordinates with (0, 0) in the top left
