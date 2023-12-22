@@ -6,8 +6,10 @@ import './App.css';
 Core.setWorkerPath("webviewer/lib/core");
 Core.enableFullPDF();
 
-const workerTransportPromise = Core.PDFNet.initialize().then(() =>
-  Core.initPDFWorkerTransports("ems", {})
+const licenseKey = 'your_license_key';  // sign up to get a free trial key at https://dev.apryse.com
+
+const workerTransportPromise = Core.PDFNet.initialize(licenseKey).then(() =>
+  Core.initPDFWorkerTransports("pdf", {}, licenseKey)
 );
 
 const App = () => {
@@ -20,7 +22,7 @@ const App = () => {
         workerTransportPromise,
         path: '/webviewer/lib',
         initialDoc: '/files/construction_drawing-final.pdf',
-        licenseKey: 'your_license_key'  // sign up to get a free trial key at https://dev.apryse.com
+        licenseKey,
       },
       viewer.current,
     ).then((instance) => {
