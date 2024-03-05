@@ -30,7 +30,7 @@ const App = () => {
         // wait for the document to be fully loaded
         // this will also fix annotation locations
         // uncomment the following line to see the expected annotation locations
-        await documentViewer.getDocument().getDocumentCompletePromise();
+        // await documentViewer.getDocument().getDocumentCompletePromise();
 
         const importTasks = stickyAnnotations.map((annotation) =>
           annotationManager.importAnnotationCommand(annotation)
